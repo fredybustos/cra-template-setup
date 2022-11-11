@@ -12,7 +12,7 @@ You can find the configuration for **Prettier** and **ESLint**, so your code wil
 
 ### From npm
 
-npx create-react-app my-app --template setup
+`npx create-react-app my-app --template setup`
 
 # Getting Started with Create React App
 
