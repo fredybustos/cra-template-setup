@@ -1,6 +1,6 @@
 {
   "name": "cra-template-setup",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This template is amezing to create apps with a perfect configration.",
   "main": "template.json",
   "keywords": [
