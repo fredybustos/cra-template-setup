@@ -16,7 +16,6 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://npm.pkg.github.com'
           scope: '@fredybustos'
-      - run: npm ci
       - run: npm publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
