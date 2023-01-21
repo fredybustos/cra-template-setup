@@ -1,20 +1,21 @@
 import Signin from 'app/signin'
-import useAuth from 'hooks/useAuth'
-import { Routes as Router, Route, Navigate, Outlet } from 'react-router-dom'
-
-const ProtectedRoutes = () => {
-  const { session } = useAuth()
-  return session?.token ? <Outlet /> : <Navigate to="/login" replace />
-}
+import { AuthProvider } from 'context/AuthContext'
+import { Routes, Route } from 'react-router-dom'
+import PrivateRoute from 'router/PrivateRoute'
+import PublicRoute from 'router/PublicRoute'
+import Home from './home'
 
 export default function App() {
   return (
-    <Router>
-      <Route path="login" element={<Signin />} />
-      <Route element={<ProtectedRoutes />}>
-        <Route path="/" element={<h1>App</h1>} />
-        <Route path="/home" element={<h1>App</h1>} />
-      </Route>
-    </Router>
+   <AuthProvider>
+      <Routes>
+        <Route path="/login" element={<PublicRoute />}>
+          <Route index path="/login" element={<Signin />} />
+        </Route>
+        <Route path="/" element={<PrivateRoute />}>
+          <Route index element={<Home />} />
+        </Route>
+      </Routes>
+    </AuthProvider>
   )
 }

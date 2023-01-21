@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useCallback, useMemo, useState } from 'react'
 import axios from 'axios'
 import store from 'storejs'
 
@@ -16,16 +16,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     user: {} as Session['user']
   })
 
-  const login = (token: string) => {
+  const login = useCallback((token: string) => {
     store.set('SESSION', token)
     setUser(token)
-  }
+    setCommonHeaders(token)
+  }, [])
 
-  useEffect(() => {
-    if (session.token) {
-      setCommonHeaders(session.token)
-      setUser(session.token)
-    }
+  const logout = useCallback(() => {
+    store.remove('SESSION')
+    setSession({} as Session)
   }, [])
 
   const setUser = (token: string) => {
@@ -41,22 +40,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  const logout = () => {
-    store.remove('SESSION')
-    setSession({} as Session)
-  }
-
-  return (
-    <AuthContext.Provider
-      value={{
-        session,
-        login,
-        logout
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo(
+    () => ({
+      session,
+      login,
+      logout
+    }),
+    [session, login, logout]
   )
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export default AuthContext
